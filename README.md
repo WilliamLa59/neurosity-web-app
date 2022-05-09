@@ -9,7 +9,9 @@ Built using the following **[Starter Code](https://github.com/neurosity/notion-r
 
 ### Before you start   
 This project assumes the MongoDB connection string is stored within a .env file under the variable name "CONNECTION_STRING".  
-You must create a new file called ".env" within the root directory and copy the following line and replace the "CONNECTION STRING HERE" string with your actual connection string, with the user password, without quotes.
+You must create a new file called ".env" within the root directory  
+Copy the following line and replace the "CONNECTION STRING HERE" string with your actual connection string, with the user password, without quotes.
+        CONNECTION_STRING = "CONNECTION STRING HERE"
 
 ### How to use
 1) Start the server/backend by running "npm start" within the root directory.
