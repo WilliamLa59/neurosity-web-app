@@ -47,7 +47,7 @@ export function Calm() {
   }, [user]);
 
   useEffect(() => {
-    if (calm != 0 && focus != 0){
+    if (calm !== 0 && focus !== 0){
       
       console.log("calm changed to: " + calm);
       console.log("focus changed to: " + focus);
