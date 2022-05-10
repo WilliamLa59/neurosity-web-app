@@ -46,6 +46,7 @@ export function Calm() {
     }
   }, [user]);
 
+  //For Database Testing
   useEffect(() => {
     if (calm !== 0 && focus !== 0){
       
@@ -76,6 +77,7 @@ export function Calm() {
     
   },[calm, focus])
 
+  //For Device Reading
   // useEffect(() => {
   //   if (!user) {
   //     return;
