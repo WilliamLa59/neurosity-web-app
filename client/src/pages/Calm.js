@@ -46,7 +46,7 @@ export function Calm() {
     }
   }, [user]);
 
-  //For Database Testing
+
   useEffect(() => {
     if (calm !== 0 && focus !== 0){
       
@@ -78,34 +78,34 @@ export function Calm() {
   },[calm, focus])
 
   //For Device Reading
-  // useEffect(() => {
-  //   if (!user) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
 
-  //   const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
-  //     const brainWaves = brainwaves.toString();
-  //     setBrainWaves(brainWaves);  
-  //     console.log(brainwaves);
-  //   });
+    const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
+      const brainWaves = brainwaves.toString();
+      setBrainWaves(brainWaves);  
+    });
 
-  //   const calmSub = notion.calm().subscribe((calm) => {
-  //     const calmScore = Math.trunc(calm.probability * 100);
-  //     setCalm(calmScore);
-  //   });
+    const calmSub = notion.calm().subscribe((calm) => {
+      const calmScore = Math.trunc(calm.probability * 100);
+      setCalm(calmScore);
+    });
     
-  //   const focusSub = notion.focus().subscribe((focus) => {
-  //     const focusScore = Math.trunc(focus.probability * 100);
-  //     setFocus(focusScore);
-  //   })
+    const focusSub = notion.focus().subscribe((focus) => {
+      const focusScore = Math.trunc(focus.probability * 100);
+      setFocus(focusScore);
+    })
 
-  //   return () => {
-  //     brainSub.unsubscribe();
-  //     calmSub.unsubscribe();
-  //     focusSub.unsubscribe();
-  //   };
-  // }, [user, brainwaves, calm, focus]);
+    return () => {
+      brainSub.unsubscribe();
+      calmSub.unsubscribe();
+      focusSub.unsubscribe();
+    };
+  }, [user, brainwaves, calm, focus]);
 
+  
   return (
     <main className="main-container">
       {user ? <Nav /> : null}
