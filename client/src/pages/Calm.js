@@ -116,6 +116,7 @@ export function Calm() {
         <>&nbsp;{focus}%</> <div className="calm-word">focus</div>
       </div>
 
+      {/*For Database testing */}
       <div>
         <form onSubmit={handleSubmit}>
           <div className="form-input" >
