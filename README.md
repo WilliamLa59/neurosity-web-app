@@ -10,6 +10,7 @@ Built off of the following **[Starter Code](https://github.com/neurosity/notion-
 ### Before you start   
 This project assumes the MongoDB connection string is stored within a .env file under the variable name "CONNECTION_STRING".  
 You must create a new file called ".env" within the root directory  
+
 Copy the following line and replace "CONNECTION STRING HERE" with your actual connection string, there should be no quotations.
 *make sure you put your password and specifc database name within your connection string* 
 
