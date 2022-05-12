@@ -28,10 +28,13 @@ mongoose.connect(connection_string, {
 //schema
 const Schema = mongoose.Schema;
 const MindSchema = new Schema ({
-    brainwaves: String,
-    calm: String,
-    focus: String,
-    date: { type: String, default: Date.now }
+    date: String,
+    mindlogs: [{
+        entryid: Number,
+        calm: String,
+        focus: String,
+        brainwaves: String,
+    }]
 })
 
 //model

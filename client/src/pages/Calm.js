@@ -9,6 +9,17 @@ import { set } from "mongoose";
 
 export function Calm() {
 
+  var now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0'); //January is 0!
+  const yyyy = now.getFullYear();
+  const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+  now = mm + '/' + dd + '/' + yyyy + "," + time;
+  
+  const [counter, setCounter] = useState(0);
+  const [test, setTest] = useState({"date": now, "mindlogs": [{"entryid": counter, "calm":0, "focus":0, "brainwaves":""}]});
+  console.log(test);
+
   const { user } = useNotion();
   const [brainwaves, setBrainWaves] = useState("");
   const [calm, setCalm] = useState(0);
@@ -26,19 +37,44 @@ export function Calm() {
   }
 
   const handleSubmit = (event) => {
+    event.preventDefault();
+
+    setCounter(counter + 1);
     console.log(inputs);
     
     setCalm(inputs.newcalm);
     setFocus(inputs.newfocus);
-    console.log()
 
     setInputs({
       calm: "",
       focus: ""
     })
-
-    event.preventDefault();
+    
+    // setTest = (values => ({...values, "mindlog": {"calm": calm, "focus": focus}}));
+    // console.log(JSON.stringify(test));
+    
   }
+
+  const handleLog = (event) => {
+    event.preventDefault();
+
+    const payload = test;
+      
+    console.log(payload);
+
+    axios({
+      url:'http://localhost:8080/save',
+      method: 'POST',
+      data: payload
+    })
+    .then(() => {
+      console.log("Data has been sent to the server");
+    })
+    .catch(() => {
+      console.log("Internal server error");
+    });;
+  }
+
 
   useEffect(() => {
     if (!user) {
@@ -52,32 +88,18 @@ export function Calm() {
       
       console.log("calm changed to: " + calm);
       console.log("focus changed to: " + focus);
+
+      setTest((prevState) => ({
+        ...prevState,
+        "mindlogs": [...prevState.mindlogs, {"entryid": counter, "calm":calm, "focus":focus, "brainwaves":brainwaves}]
+      }));
       
-      const payload = {
-        brainwaves: brainwaves,
-        calm: calm,
-        focus: focus
-      };
-      
-      console.log(payload);
-  
-      axios({
-        url:'http://localhost:8080/save',
-        method: 'POST',
-        data: payload
-      })
-      .then(() => {
-        console.log("Data has been sent to the server");
-      })
-      .catch(() => {
-        console.log("Internal server error");
-      });;
-  
+    
     }
     
   },[calm, focus])
 
-  //For Device Reading
+  // For Device Reading
   useEffect(() => {
     if (!user) {
       return;
@@ -128,6 +150,8 @@ export function Calm() {
           <button>submit</button>
         </form>
       </div>
+
+      <button onClick={handleLog}>Log</button>
 
     </main>
   );
