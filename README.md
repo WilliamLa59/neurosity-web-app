@@ -44,3 +44,9 @@ nuerosity-web-app/client/src/pages/Calm.js
         </form>
         </div> 
 
+## Changelog
+- edited database and website to log entries as part of sessions instead of indivdually.
+
+- streamline data logging procedures
+- empty object on data log
+- need to add timestamps for each entry, and session end time stamp
