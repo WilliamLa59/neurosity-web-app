@@ -47,7 +47,7 @@ nuerosity-web-app/client/src/pages/Calm.js
 ## ToDo List
 - streamline data logging procedures
 - empty object on data log
-- need to add timestamps for each entry, and session end time stamp
+- need to add timestamps for each entry, and on session end
 - add naming functionality for each session.
 
 ## Changelog
