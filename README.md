@@ -45,12 +45,12 @@ nuerosity-web-app/client/src/pages/Calm.js
         </div> 
 
 ## ToDo List
-- streamline data logging procedures
+- streamline data logging procedure
 - empty object on data log
-- need to add timestamps for each entry, and on session end
-- add naming functionality for each session.
+- add timestamps for each entry and on session end
+- add naming functionality for each session
 
 ## Changelog
-- edited database and website to log entries as part of sessions instead of indivdually.
+- edited database and website to categorize entry logs as part of sessions instead of indivdually.
 
 
