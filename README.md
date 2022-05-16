@@ -49,6 +49,9 @@ nuerosity-web-app/client/src/pages/Calm.js
 - empty object on data log
 - add timestamps for each entry and on session end
 - add naming functionality for each session
+- refactor naming convention
+- add comments to code
+- explain functionality and processes in documentation 
 
 ## Changelog
 - edited database and website to categorize entry logs as part of sessions instead of indivdually.
