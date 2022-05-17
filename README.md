@@ -56,12 +56,15 @@ nuerosity-web-app/client/src/pages/Calm.js
 - ~~add comments to code~~
 - ~~empty object on data log~~
 
-## Changelog (dd/mm/yy)
-### 12/05/22
-- edited database and website to categorize entry logs as part of sessions instead of indivdually.
-### 16/05/22
+## Changelog (mm/dd/yy)
+### 05/09/22
+- initial commit
+### 05/12/22
+- edited database and website to categorize entry logs into "sessions" instead of indivdual logs within a database.
+### 05/16/22
 - added the ability to attach a first and last name to a current session 
 - each log entry now has a timestamp of when it was taken (format: hh:mm:ss)
-### 17/05/22
+### 05/17/22
 - removed empty starting entry
+- added seconds to the session start timestamp
 - refreshes webpage on log to empty state object
