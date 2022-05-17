@@ -43,17 +43,21 @@ nuerosity-web-app/client/src/pages/Calm.js
           <button>submit</button>
         </form>
         </div> 
+        {/*For Database testing */}
 
-## ToDo List
+## ToDo List (in no particular order)
 - streamline data logging procedure
 - empty object on data log
-- add timestamps for each entry and on session end
-- add naming functionality for each session
-- refactor naming convention
-- add comments to code
+- add timestamps for session end
+- refactor variable naming convention
 - explain functionality and processes in documentation 
+- ~~categorize database into "sessions" being a collection of entry logs~~
+- ~~add timestamps for each entries~~ 
+- ~~add naming functionality for each session~~
+- ~~add comments to code~~
 
 ## Changelog
 - edited database and website to categorize entry logs as part of sessions instead of indivdually.
-
+- added the ability to attach a first and last name to a current session 
+- each log entry now has a timestamp of when it was taken (format: hh:mm:ss)
 
