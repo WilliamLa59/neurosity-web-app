@@ -22,11 +22,11 @@ export function Calm() {
   const dd = String(now.getDate()).padStart(2, '0');
   const mm = String(now.getMonth() + 1).padStart(2, '0'); //January is 0!
   const yyyy = now.getFullYear();
-  const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+  const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: "2-digit"});
   now = mm + '/' + dd + '/' + yyyy + ", " + time;
   
   //main state object
-  const [test, setTest] = useState({"date": now, "firstName":firstName, "lastName":lastName, "mindlogs": [{"time": "", "entryid": counter, "calm":calm, "focus":focus, "brainWaves":""}]});
+  const [test, setTest] = useState({"date": now, "firstName":firstName, "lastName":lastName, "mindlogs": []});
   console.log(test);
 
   //test input state object
@@ -113,6 +113,8 @@ export function Calm() {
     .catch(() => {
       console.log("Internal server error");
     });;
+    
+    window.location.reload();
   };
 
 
@@ -144,7 +146,7 @@ export function Calm() {
       console.log("namechanged: "+JSON.stringify(test));
       handleLog();
     }
-  },[test.firstName, test.lastName]);
+  },[test.firstName, test.lastName, handleLog, test]);
 
 
   //detects a change in value for calm and focus levels and adds a mindlog entry using the new values
@@ -176,7 +178,7 @@ export function Calm() {
 
     const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
       const brainWaves = brainwaves.toString();
-      setBrainWaves(brainWaves);  
+      setBrainWaves(JSON.stringify(brainWaves));  
     });
 
     const calmSub = notion.calm().subscribe((calm) => {
