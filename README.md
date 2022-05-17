@@ -47,7 +47,6 @@ nuerosity-web-app/client/src/pages/Calm.js
 
 ## ToDo List (in no particular order)
 - streamline data logging procedure
-- empty object on data log
 - add timestamps for session end
 - refactor variable naming convention
 - explain functionality and processes in documentation 
@@ -55,9 +54,14 @@ nuerosity-web-app/client/src/pages/Calm.js
 - ~~add timestamps for each entries~~ 
 - ~~add naming functionality for each session~~
 - ~~add comments to code~~
+- ~~empty object on data log~~
 
-## Changelog
+## Changelog (dd/mm/yy)
+### 12/05/22
 - edited database and website to categorize entry logs as part of sessions instead of indivdually.
+### 16/05/22
 - added the ability to attach a first and last name to a current session 
 - each log entry now has a timestamp of when it was taken (format: hh:mm:ss)
-
+### 17/05/22
+- removed empty starting entry
+- refreshes webpage on log to empty state object
