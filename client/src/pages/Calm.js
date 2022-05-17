@@ -5,38 +5,56 @@ import { notion, useNotion } from "../services/notion";
 import { Nav } from "../components/Nav";
 
 import axios from 'axios';
-import { set } from "mongoose";
+
 
 export function Calm() {
+  //individual states
+  const { user } = useNotion();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [brainwaves, setBrainWaves] = useState("");
+  const [calm, setCalm] = useState(0);
+  const [focus, setFocus] = useState(0);
+  const [counter, setCounter] = useState(0);
 
+  //creates session start date and time 
   var now = new Date();
   const dd = String(now.getDate()).padStart(2, '0');
   const mm = String(now.getMonth() + 1).padStart(2, '0'); //January is 0!
   const yyyy = now.getFullYear();
   const time = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
-  now = mm + '/' + dd + '/' + yyyy + "," + time;
+  now = mm + '/' + dd + '/' + yyyy + ", " + time;
   
-  const [counter, setCounter] = useState(0);
-  const [test, setTest] = useState({"date": now, "mindlogs": [{"entryid": counter, "calm":0, "focus":0, "brainwaves":""}]});
+  //main state object
+  const [test, setTest] = useState({"date": now, "firstName":firstName, "lastName":lastName, "mindlogs": [{"time": "", "entryid": counter, "calm":calm, "focus":focus, "brainWaves":""}]});
   console.log(test);
 
-  const { user } = useNotion();
-  const [brainwaves, setBrainWaves] = useState("");
-  const [calm, setCalm] = useState(0);
-  const [focus, setFocus] = useState(0);
-
+  //test input state object
   const [inputs, setInputs] = useState({
     newcalm: "",
     newfocus: "",
-  })
+  });
 
-  const handleChange = (event) => {
+  //name input state object
+  const [nameinputs, setNameInputs] = useState({
+    newfirstName: "",
+    newlastName: ""
+  });
+
+
+  //function that takes the inputed calm and focus levels and 
+  //builds them in a state object.
+  const testHandleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs(values => ({...values, [name]: value}))
-  }
+  };
 
-  const handleSubmit = (event) => {
+
+  //takes calm and focus levels from the state object and 
+  //assigns them to their individual state
+  //increments counter for main state
+  const testHandleSubmit = (event) => {
     event.preventDefault();
 
     setCounter(counter + 1);
@@ -48,19 +66,41 @@ export function Calm() {
     setInputs({
       calm: "",
       focus: ""
-    })
+    })  
+  };
+
+
+  //function that takes the inputed first and last name and 
+  //builds them in a state object.
+  const nameHandleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setNameInputs(values => ({...values, [name]: value}))
+  };
+
+
+  //takes first and last name from the state object and 
+  //assigns them to their individual state
+  const nameHandleSubmit = (event) => {
+    event.preventDefault();
     
-    // setTest = (values => ({...values, "mindlog": {"calm": calm, "focus": focus}}));
-    // console.log(JSON.stringify(test));
+    setFirstName(nameinputs.newfirstName);
+    setLastName(nameinputs.newlastName);
     
+    setNameInputs({
+      newfirstName: "",
+      newlastName: ""
+    });
+
   }
 
-  const handleLog = (event) => {
-    event.preventDefault();
 
-    const payload = test;
+  //function that takes the current state object and 
+  //sends it to a API endpoint that saves it to a database
+  const handleLog = () => {
+    const payload = test; 
       
-    console.log(payload);
+    console.log("payload"+JSON.stringify(payload));
 
     axios({
       url:'http://localhost:8080/save',
@@ -73,9 +113,11 @@ export function Calm() {
     .catch(() => {
       console.log("Internal server error");
     });;
-  }
+  };
 
 
+
+  //if there is no user relocate back to login screen
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -83,23 +125,50 @@ export function Calm() {
   }, [user]);
 
 
+  //assigns the inputed first and last name to the main state object
+  useEffect(()=> {
+    console.log("name changed: "+firstName+", "+lastName);
+
+    setTest((prevState) => ({
+      ...prevState,
+      "firstName": firstName,
+      "lastName": lastName
+    }));
+    
+  },[firstName, lastName]);
+
+
+  //detects when first and last names are assigned to the main state object and calls the handleLog function
+  useEffect(()=>{
+    if (test.firstName !== "" && test.lastName !== ""){
+      console.log("namechanged: "+JSON.stringify(test));
+      handleLog();
+    }
+  },[test.firstName, test.lastName]);
+
+
+  //detects a change in value for calm and focus levels and adds a mindlog entry using the new values
   useEffect(() => {
     if (calm !== 0 && focus !== 0){
       
       console.log("calm changed to: " + calm);
       console.log("focus changed to: " + focus);
 
+      var current = new Date();
+      const currentTime = current.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+      current = currentTime;
+
       setTest((prevState) => ({
         ...prevState,
-        "mindlogs": [...prevState.mindlogs, {"entryid": counter, "calm":calm, "focus":focus, "brainwaves":brainwaves}]
+        "mindlogs": [...prevState.mindlogs, {"time":current ,"entryid": counter, "calm":calm, "focus":focus, "brainWaves":brainwaves}]
       }));
-      
-    
     }
     
-  },[calm, focus])
+  },[counter, calm, focus, brainwaves]);
+
 
   // For Device Reading
+  //takes brainwave, calm, and focus reading from neurosity device,
   useEffect(() => {
     if (!user) {
       return;
@@ -138,20 +207,34 @@ export function Calm() {
         <>&nbsp;{focus}%</> <div className="calm-word">focus</div>
       </div>
 
+
       {/*For Database testing */}
       <div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={testHandleSubmit}>
           <div className="form-input" >
-            <input type='Text' name="newcalm" value={inputs.newcalm || ""} onChange={handleChange}/>
+            <input type='Text' name="newcalm" value={inputs.newcalm || ""} onChange={testHandleChange} placeholder="Set Calm"/>
           </div>
           <div className="form-input">
-            <input type='Text' name="newfocus" value={inputs.newfocus || ""} onChange={handleChange}/>
+            <input type='Text' name="newfocus" value={inputs.newfocus || ""} onChange={testHandleChange} placeholder="Set Focus"/>
           </div>
-          <button>submit</button>
+          <button>Simulate New Values</button>
         </form>
       </div>
+      {/*For Database testing */}
 
-      <button onClick={handleLog}>Log</button>
+
+      <div>
+        <form onSubmit={nameHandleSubmit}>
+          <div className="form-input">
+            <input type='Text' name="newfirstName" value={nameinputs.newfirstName || ""} onChange={nameHandleChange} placeholder="First Name"/>
+          </div>
+          <div className="form-input">
+            <input type='Text' name="newlastName" value={nameinputs.newlastName || ""} onChange={nameHandleChange} placeholder="Last Name"/>
+          </div>
+          <button>Log</button>
+        </form>
+      </div>
+      
 
     </main>
   );

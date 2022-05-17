@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 var cors = require('cors');
 const path = require("path");
+const { stringify } = require("querystring");
 const app = express();
 
 const PORT = process.env.PORT || 8080;
@@ -29,11 +30,14 @@ mongoose.connect(connection_string, {
 const Schema = mongoose.Schema;
 const MindSchema = new Schema ({
     date: String,
+    firstName: String,
+    lastName: String,
     mindlogs: [{
-        entryid: Number,
+        time: String,
+        entryId: Number,
         calm: String,
         focus: String,
-        brainwaves: String,
+        brainWaves: String,
     }]
 })
 
