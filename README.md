@@ -56,6 +56,9 @@ nuerosity-web-app/client/src/pages/Calm.js
 - ~~add comments to code~~
 - ~~empty object on data log~~
 
+## Bug List
+- entryid doesn't increment when used with the device.
+
 ## Changelog (mm/dd/yy)
 ### 05/09/22
 - initial commit
