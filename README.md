@@ -68,3 +68,4 @@ nuerosity-web-app/client/src/pages/Calm.js
 - removed empty starting entry
 - added seconds to the session start timestamp
 - refreshes webpage on log to empty state object
+- fixed brainwave property displaying "[object Object]" (needs to be tested)
