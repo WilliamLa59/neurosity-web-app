@@ -49,7 +49,11 @@ nuerosity-web-app/client/src/pages/Calm.js
 - streamline data logging procedure
 - add timestamps for session end
 - refactor variable naming convention
-- explain functionality and processes in documentation 
+- explain functionality and processes in documentation
+- add a table that updates in real time that follows along the main state object
+- start and stop button for reading from the crown
+- transfer JSON data into excel/csv format and allow for download
+- search feature for table to display previous sessions
 - ~~categorize database into "sessions" being a collection of entry logs~~
 - ~~add timestamps for each entries~~ 
 - ~~add naming functionality for each session~~
