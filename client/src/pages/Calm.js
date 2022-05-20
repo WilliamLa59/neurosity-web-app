@@ -272,7 +272,7 @@ export function Calm() {
         </form>
       </div>
       
-      <table className="table table-striped">
+      {/* <table className="table table-striped">
         <tbody>
           <tr className="table-head">
             <th>timestamp</th>
@@ -290,7 +290,7 @@ export function Calm() {
             
           ))}
         </tbody>
-      </table>
+      </table> */}
 
     </main>
   );
