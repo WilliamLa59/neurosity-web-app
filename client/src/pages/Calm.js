@@ -17,6 +17,9 @@ export function Calm() {
   const [focus, setFocus] = useState(0);
   const [counter, setCounter] = useState(0);
 
+  const [status, setStatus] = useState(false);
+  const [statusText, setStatusText] = useState("Start");
+
   //creates session start date and time 
   var now = new Date();
   const dd = String(now.getDate()).padStart(2, '0');
@@ -26,8 +29,11 @@ export function Calm() {
   now = mm + '/' + dd + '/' + yyyy + ", " + time;
   
   //main state object
-  const [test, setTest] = useState({"date": now, "firstName":firstName, "lastName":lastName, "mindlogs": []});
-  console.log(test);
+  const [currentSession, setCurrentSession] = useState({"date": now, "firstName":"", "lastName":"", "mindlogs": []});
+  console.log(currentSession);
+
+  //copy of main state object for table data
+  const [sessionTable, setSessionTable] = useState(currentSession);
 
   //test input state object
   const [inputs, setInputs] = useState({
@@ -41,6 +47,20 @@ export function Calm() {
     newlastName: ""
   });
 
+
+  //function that handles changes in status
+  //lets the website know when to and when not to read from the device
+  const statusHandleChange = () => {
+    if(status === false){
+      setStatusText("Stop");
+      setStatus(true);
+      console.log("Status: " + status);
+    }else{
+      setStatusText("Start")
+      setStatus(false);
+      console.log("Status: " + status);
+    }
+  }
 
   //function that takes the inputed calm and focus levels and 
   //builds them in a state object.
@@ -56,12 +76,11 @@ export function Calm() {
   //increments counter for main state
   const testHandleSubmit = (event) => {
     event.preventDefault();
-
-    setCounter(counter + 1);
-    console.log(inputs);
     
     setCalm(inputs.newcalm);
     setFocus(inputs.newfocus);
+
+    setCounter(counter + 1);
 
     setInputs({
       calm: "",
@@ -91,14 +110,13 @@ export function Calm() {
       newfirstName: "",
       newlastName: ""
     });
-
   }
 
 
   //function that takes the current state object and 
   //sends it to a API endpoint that saves it to a database
   const handleLog = () => {
-    const payload = test; 
+    const payload = currentSession; 
       
     console.log("payload"+JSON.stringify(payload));
 
@@ -114,9 +132,9 @@ export function Calm() {
       console.log("Internal server error");
     });;
     
-    window.location.reload();
+    // window.location.reload();
+    setCurrentSession({"date": now, "firstName":"", "lastName":"", "mindlogs": []});
   };
-
 
 
   //if there is no user relocate back to login screen
@@ -129,9 +147,8 @@ export function Calm() {
 
   //assigns the inputed first and last name to the main state object
   useEffect(()=> {
-    console.log("name changed: "+firstName+", "+lastName);
 
-    setTest((prevState) => ({
+    setCurrentSession((prevState) => ({
       ...prevState,
       "firstName": firstName,
       "lastName": lastName
@@ -142,65 +159,83 @@ export function Calm() {
 
   //detects when first and last names are assigned to the main state object and calls the handleLog function
   useEffect(()=>{
-    if (test.firstName !== "" && test.lastName !== ""){
-      console.log("namechanged: "+JSON.stringify(test));
+    if (currentSession.firstName !== "" && currentSession.lastName !== ""){
       handleLog();
     }
-  },[test.firstName, test.lastName, handleLog, test]);
+  },[currentSession.firstName, currentSession.lastName]);
 
 
   //detects a change in value for calm and focus levels and adds a mindlog entry using the new values
   useEffect(() => {
     if (calm !== 0 && focus !== 0){
-      
-      console.log("calm changed to: " + calm);
-      console.log("focus changed to: " + focus);
 
       var current = new Date();
       const currentTime = current.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
       current = currentTime;
 
-      setTest((prevState) => ({
+      setCurrentSession((prevState) => ({
         ...prevState,
         "mindlogs": [...prevState.mindlogs, {"time":current ,"entryid": counter, "calm":calm, "focus":focus, "brainWaves":brainwaves}]
       }));
+
     }
     
   },[counter, calm, focus, brainwaves]);
 
 
-  // For Device Reading
-  //takes brainwave, calm, and focus reading from neurosity device,
+  //updates the table
+  //on log it keeps the last session's data until a new session begins 
+  useEffect(() =>{
+    if(currentSession.mindlogs.length !== 0){
+      setSessionTable(currentSession);
+    }
+  },[currentSession]);
+
+
+  //For Device Reading
+  //if status is set to true
+  //takes brainwave, calm, and focus reading from neurosity device
   useEffect(() => {
     if (!user) {
       return;
+    } 
+    
+    if(status === false){
+      console.log("is not reading");
     }
 
-    const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
-      const brainWaves = brainwaves.toString();
-      setBrainWaves(JSON.stringify(brainWaves));  
-    });
+    if(status === true){
+      console.log("is reading");
 
-    const calmSub = notion.calm().subscribe((calm) => {
-      const calmScore = Math.trunc(calm.probability * 100);
-      setCalm(calmScore);
-    });
+      const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
+        const brainWaves = brainwaves.toString();
+        setBrainWaves(JSON.stringify(brainWaves));  
+      });
+  
+      const calmSub = notion.calm().subscribe((calm) => {
+        const calmScore = Math.trunc(calm.probability * 100);
+        setCalm(calmScore);
+      });
+      
+      const focusSub = notion.focus().subscribe((focus) => {
+        const focusScore = Math.trunc(focus.probability * 100);
+        setFocus(focusScore);
+      })
+  
+      return () => {
+        brainSub.unsubscribe();
+        calmSub.unsubscribe();
+        focusSub.unsubscribe();
+      };
+    }
     
-    const focusSub = notion.focus().subscribe((focus) => {
-      const focusScore = Math.trunc(focus.probability * 100);
-      setFocus(focusScore);
-    })
-
-    return () => {
-      brainSub.unsubscribe();
-      calmSub.unsubscribe();
-      focusSub.unsubscribe();
-    };
-  }, [user, brainwaves, calm, focus]);
+  }, [user, brainwaves, calm, focus, status]);
 
   
   return (
     <main className="main-container">
+      <button onClick={statusHandleChange}>{statusText}</button>
+
       {user ? <Nav /> : null}
       <div className="calm-score">
         <>&nbsp;{calm}%</> <div className="calm-word">Calm</div>
@@ -237,6 +272,25 @@ export function Calm() {
         </form>
       </div>
       
+      <table className="table table-striped">
+        <tbody>
+          <tr className="table-head">
+            <th>timestamp</th>
+            <th>entryid</th>
+            <th>calm</th>
+            <th>focus</th>
+          </tr>
+          {sessionTable.mindlogs.map((item, i) => (
+            <tr key={i}>
+              <td>{item.time}</td>
+              <td>{item.entryid}</td>
+              <td>{item.calm}</td>
+              <td>{item.focus}</td>
+            </tr>
+            
+          ))}
+        </tbody>
+      </table>
 
     </main>
   );
