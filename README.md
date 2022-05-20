@@ -46,19 +46,21 @@ nuerosity-web-app/client/src/pages/Calm.js
         {/*For Database testing */}
 
 ## ToDo List (in no particular order)
-- streamline data logging procedure
 - add timestamps for session end
-- refactor variable naming convention
-- explain functionality and processes in documentation
-- add a table that updates in real time that follows along the main state object
-- start and stop button for reading from the crown
+- explain functionality and processes in documentation 
 - transfer JSON data into excel/csv format and allow for download
 - search feature for table to display previous sessions
+- graph brainwaves (maybe calm and focus levels too?)
+- add styling
 - ~~categorize database into "sessions" being a collection of entry logs~~
 - ~~add timestamps for each entries~~ 
 - ~~add naming functionality for each session~~
 - ~~add comments to code~~
 - ~~empty object on data log~~
+- ~~refactor variable naming convention~~
+- ~~add a table that updates in real time that follows along the main state object~~
+- ~~streamline data logging procedure~~
+- ~~start and stop button for reading from the crown~~
 
 ## Bug List
 - entryid doesn't increment when used with the device.
@@ -76,3 +78,7 @@ nuerosity-web-app/client/src/pages/Calm.js
 - added seconds to the session start timestamp
 - refreshes webpage on log to empty state object
 - fixed brainwave property displaying "[object Object]" (needs to be tested)
+### 05/20/22
+- added a start/stop button for device reading
+- added a table for the mindlogs that updates in realtime, data persists on log but clears when a new session begins
+- no longer need to refresh on log, it will automatically clear main state object
