@@ -49,12 +49,19 @@ nuerosity-web-app/client/src/pages/Calm.js
 - streamline data logging procedure
 - add timestamps for session end
 - refactor variable naming convention
-- explain functionality and processes in documentation 
+- explain functionality and processes in documentation
+- add a table that updates in real time that follows along the main state object
+- start and stop button for reading from the crown
+- transfer JSON data into excel/csv format and allow for download
+- search feature for table to display previous sessions
 - ~~categorize database into "sessions" being a collection of entry logs~~
 - ~~add timestamps for each entries~~ 
 - ~~add naming functionality for each session~~
 - ~~add comments to code~~
 - ~~empty object on data log~~
+
+## Bug List
+- entryid doesn't increment when used with the device.
 
 ## Changelog (mm/dd/yy)
 ### 05/09/22
@@ -68,3 +75,4 @@ nuerosity-web-app/client/src/pages/Calm.js
 - removed empty starting entry
 - added seconds to the session start timestamp
 - refreshes webpage on log to empty state object
+- fixed brainwave property displaying "[object Object]" (needs to be tested)
