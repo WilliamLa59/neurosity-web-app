@@ -234,8 +234,7 @@ export function Calm() {
   
   return (
     <main className="main-container">
-      <button onClick={statusHandleChange}>{statusText}</button>
-
+      
       {user ? <Nav /> : null}
       <div className="calm-score">
         <>&nbsp;{calm}%</> <div className="calm-word">Calm</div>
@@ -244,6 +243,9 @@ export function Calm() {
         <>&nbsp;{focus}%</> <div className="calm-word">focus</div>
       </div>
 
+      <div>
+        <button onClick={statusHandleChange}>{statusText}</button>
+      </div>
 
       {/*For Database testing */}
       <div>
@@ -263,10 +265,10 @@ export function Calm() {
       <div>
         <form onSubmit={nameHandleSubmit}>
           <div className="form-input">
-            <input type='Text' name="newfirstName" value={nameinputs.newfirstName || ""} onChange={nameHandleChange} placeholder="First Name"/>
+            <input type='Text' name="newfirstName" value={nameinputs.newfirstName || ""} onChange={nameHandleChange} placeholder="First Name" required/>
           </div>
           <div className="form-input">
-            <input type='Text' name="newlastName" value={nameinputs.newlastName || ""} onChange={nameHandleChange} placeholder="Last Name"/>
+            <input type='Text' name="newlastName" value={nameinputs.newlastName || ""} onChange={nameHandleChange} placeholder="Last Name" required/>
           </div>
           <button>Log</button>
         </form>
