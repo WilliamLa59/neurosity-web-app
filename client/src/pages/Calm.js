@@ -208,8 +208,7 @@ export function Calm() {
       console.log("is reading");
 
       const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
-        const brainWaves = brainwaves.toString();
-        setBrainWaves(JSON.stringify(brainWaves));  
+        setBrainWaves(JSON.stringify(brainwaves));  
       });
   
       const calmSub = notion.calm().subscribe((calm) => {
