@@ -8,11 +8,13 @@ import axios from 'axios';
 
 
 export function Calm() {
+  
+
   //individual states
   const { user } = useNotion();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [brainwaves, setBrainWaves] = useState("");
+  const [brainwaves, setBrainWaves] = useState({});
   const [calm, setCalm] = useState(0);
   const [focus, setFocus] = useState(0);
   const [counter, setCounter] = useState(0);
@@ -208,7 +210,7 @@ export function Calm() {
       console.log("is reading");
 
       const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
-        setBrainWaves(JSON.stringify(brainwaves));  
+        setBrainWaves((brainwaves));  
       });
   
       const calmSub = notion.calm().subscribe((calm) => {

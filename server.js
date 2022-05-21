@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8080;
 //app.use
 app.use(morgan('tiny'));//HTTP request logger
 app.use(cors());
-app.use(express.json());
+app.use(express.json({limit: '5mb'}));
 app.use(express.urlencoded({extended: false}));
 
 require("dotenv").config();
@@ -37,7 +37,7 @@ const MindSchema = new Schema ({
         entryId: Number,
         calm: String,
         focus: String,
-        brainWaves: String,
+        brainWaves: [{}],
     }]
 })
 
