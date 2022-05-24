@@ -21,7 +21,7 @@ Copy the following line and replace "CONNECTION STRING HERE" with your actual co
 
 2) In another terminal, cd into the client folder and run the react app using "npm start"
 
-### Test to see if your database is connected properly
+### Test to see if your database is connected properly ( needs to be updated )
 If the connection string is correct you should be able to see "MongoDB connected successfully..." within the server side terminal when the server is started. If not you may have to go back and double check your .env file and connection string.
 
 Use the input fields to simulate a change in the calm and focus levels. This should trigger the web app to send over the new values to the database. You'll be able to see this within the server side terminal as well as on MongoDB, this is also a good time to see if its writing to the correct database.
@@ -48,10 +48,10 @@ nuerosity-web-app/client/src/pages/Calm.js
 ## ToDo List (in no particular order)
 - add timestamps for session end
 - explain functionality and processes in documentation 
-- transfer JSON data into excel/csv format and allow for download
 - search feature for table to display previous sessions
 - graph brainwaves (maybe calm and focus levels too?)
 - add styling
+- have "csvData" be created only when the "Download" button is pressed
 - ~~categorize database into "sessions" being a collection of entry logs~~
 - ~~add timestamps for each entries~~ 
 - ~~add naming functionality for each session~~
@@ -61,9 +61,10 @@ nuerosity-web-app/client/src/pages/Calm.js
 - ~~add a table that updates in real time that follows along the main state object~~
 - ~~streamline data logging procedure~~
 - ~~start and stop button for reading from the crown~~
+- ~~transfer JSON data into excel/csv format and allow for download~~
 
 ## Bug List
-- entryid doesn't increment when used with the device.
+- ~~entryid doesn't increment when used with the device.~~
 
 ## Changelog (mm/dd/yy)
 ### 05/09/22
@@ -82,3 +83,8 @@ nuerosity-web-app/client/src/pages/Calm.js
 - added a start/stop button for device reading
 - added a table for the mindlogs that updates in realtime, data persists on log but clears when a new session begins
 - no longer need to refresh on log, it will automatically clear main state object
+### 05/22/22
+- updated table to display all brainwaves readings
+- added a download function for the table to download to CSV format
+### 05/23/22
+- added some styling for main dashboard(still WIP)
