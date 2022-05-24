@@ -1,3 +1,4 @@
+
 /**
  * Global styles
  */
@@ -15,7 +16,7 @@ body {
 }
 
 .main-container {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -70,8 +71,9 @@ select {
  */
 
 .card {
-  background: #000c14;
+  /* background: #000c14; */
   color: rgb(147, 147, 147);
+  border:2px solid rgb(0, 26, 43);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,11 +81,11 @@ select {
   min-height: 150px;
   padding: 30px 20px;
   border-radius: 8px;
-  margin: 20px;
+  /* margin: 20px; */
 }
 
 .card-heading {
-  margin: 0 0 20px 0;
+  margin: 0 0 8px 0;
   color: white;
 }
 
@@ -190,7 +192,8 @@ select {
 /**
  * pages/Calm.js
  */
-.calm-score {
+
+ .calm-score {
   font-size: 100px;
   color: darkslategray;
   font-weight: 600;
@@ -211,4 +214,94 @@ select {
 
 .calm-word {
   font-size: 40px;
+}
+
+.main-dashboard{
+  display: flex;
+  background: #000c14;
+  margin: 0 auto;
+  margin-top: 4rem;
+  width: 680px;
+  min-height: 150px;
+  padding: 30px 20px;
+  border-radius: 8px;
+}
+
+.nav-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.inputs-container{
+  padding: 20px;
+  width: 300px;
+}
+
+.start-btn-container{
+  display: block;
+}
+
+.start-btn{
+  color: #000c14;
+  border: none;
+  width: 100%;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 19px;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+input{
+  width: 98%;
+  border-radius: 4px;
+  height: 20px;
+  padding: 8px 0;
+  font-size: 19px;
+  outline: none;
+}
+
+.fname-input{
+  margin-bottom: 5px;
+}
+
+.input-btn {
+  display: block;
+  background: rgb(113, 211, 211);
+  color: #000c14;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 19px;
+  cursor: pointer;
+  margin: 15px auto auto auto;
+}
+
+.simulate-btn{
+  width: 250;
+  margin-bottom: 30px;
+}
+.log-btn{
+  width: 100px;
+}
+
+.display-dashboard{
+}
+
+.gauge-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.table-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
