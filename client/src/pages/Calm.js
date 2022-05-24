@@ -229,17 +229,17 @@ export function Calm() {
       
       console.log("payload"+JSON.stringify(payload));
 
-      // axios({
-      //   url:'http://localhost:8080/save',
-      //   method: 'POST',
-      //   data: payload
-      // })
-      // .then(() => {
-      //   console.log("Data has been sent to the server");
-      // })
-      // .catch(() => {
-      //   console.log("Internal server error");
-      // });;
+      axios({
+        url:'http://localhost:8080/save',
+        method: 'POST',
+        data: payload
+      })
+      .then(() => {
+        console.log("Data has been sent to the server");
+      })
+      .catch(() => {
+        console.log("Internal server error");
+      });;
       
       // // window.location.reload();
       setCurrentSession({"date": now, "firstName":"", "lastName":"", "mindlogs": []});
@@ -287,11 +287,11 @@ export function Calm() {
 
       setCurrentSession((prevState) => ({
         ...prevState,
-        "mindlogs": [...prevState.mindlogs, {"time":current ,"entryid": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
+        "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
       }));
     }
     
-  },[counter, calm, focus, brainwaves]);
+  },[calm, focus, brainwaves]);
 
 
   //updates the table
@@ -302,7 +302,7 @@ export function Calm() {
       const tableData = [];
       currentSession.mindlogs.map((item, i) => {
         for(var x=0; x < 16; x++){
-          tableData.push([item.time,item.entryid,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]])
+          tableData.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]])
         }
       })
 
@@ -311,7 +311,7 @@ export function Calm() {
       setSessionTable(currentSession);
 
       const csvData = [...tableData];
-      csvData.unshift(["timestamp", "entryid", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
+      csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
       setCsvData(csvData);
       
     }
@@ -425,7 +425,7 @@ export function Calm() {
             <thead>
               <tr className="table-head">
                 <th>timestamp</th>
-                <th>entryid</th>
+                <th>entryId</th>
                 <th>calm</th>
                 <th>focus</th>
                 <th>CP3</th>
