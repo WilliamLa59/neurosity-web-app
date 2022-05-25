@@ -71,7 +71,7 @@ select {
  */
 
 .card {
-  /* background: #000c14; */
+  background: #000c14;
   color: rgb(147, 147, 147);
   border:2px solid rgb(0, 26, 43);
   display: flex;
@@ -218,13 +218,15 @@ select {
 
 .main-dashboard{
   display: flex;
+  justify-content: center;
   background: #000c14;
   margin: 0 auto;
   margin-top: 4rem;
-  width: 680px;
+  width: min-content;
   min-height: 150px;
   padding: 30px 20px;
   border-radius: 8px;
+
 }
 
 .nav-container{

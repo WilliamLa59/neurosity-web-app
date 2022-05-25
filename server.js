@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8080;
 //app.use
 app.use(morgan('tiny'));//HTTP request logger
 app.use(cors());
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({limit: '500mb'}));
 app.use(express.urlencoded({extended: false}));
 
 require("dotenv").config();
@@ -48,7 +48,11 @@ const MindLog = mongoose.model("MindLog", MindSchema);
 app.post('/save', (req, res) => {
     const data = req.body;
     const newMindLog = new MindLog(data)
+    const size = Buffer.byteLength(JSON.stringify(newMindLog));
+    const kiloBytes = size / 1024;
+    const megaBytes = kiloBytes / 1024;
     console.log(newMindLog);
+    console.log("size: "+megaBytes +"MB");
     newMindLog.save((error) => {
         if (error) {
             res.status(500).json({msg: 'internal server error'});

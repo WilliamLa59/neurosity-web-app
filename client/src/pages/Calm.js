@@ -7,6 +7,8 @@ import { Nav } from "../components/Nav";
 import { CSVLink } from "react-csv";
 
 import axios from 'axios';
+import { Line } from "react-chartjs-2";
+import { Charts } from "../components/Charts";
 
 
 export function Calm() {
@@ -115,7 +117,7 @@ export function Calm() {
   const [brainwaves, setBrainWaves] = useState({});
   const [calm, setCalm] = useState(0);
   const [focus, setFocus] = useState(0);
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(1);
 
   const [status, setStatus] = useState(false);
   const [statusText, setStatusText] = useState("Start Reading");
@@ -137,6 +139,17 @@ export function Calm() {
   const [sessionTable, setSessionTable] = useState(currentSession);
   const [tableData, setTableData] = useState([]);
   const [csvData, setCsvData] = useState([]);
+
+  const [graphXAxis, setGraphXAxis]=useState([]);
+  const [CP3, setCP3]=useState([]);
+  const [C3, setC3]=useState([]);
+  const [F5, setF5]=useState([]);
+  const [PO3, setPO3]=useState([]);
+  const [PO4, setPO4]=useState([]);
+  const [F6, setF6]=useState([]);
+  const [C4, setC4]=useState([]);
+  const [CP4, setCP4]=useState([]);
+
 
 
   //test input state object
@@ -246,7 +259,7 @@ export function Calm() {
     }else{
       alert("Cannot Log a Session With 0 Entries");
     }
-    
+    setCounter(0);
   };
 
   //if there is no user relocate back to login screen
@@ -279,7 +292,7 @@ export function Calm() {
 
   //detects a change in value for calm and focus levels and adds a mindlog entry using the new values
   useEffect(() => {
-    if (calm !== 0 && focus !== 0){
+    if (focus !== 0){
 
       var current = new Date();
       const currentTime = current.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit', });
@@ -289,6 +302,7 @@ export function Calm() {
         ...prevState,
         "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
       }));
+      setCounter(counter + 1);
     }
     
   },[calm, focus, brainwaves]);
@@ -299,16 +313,45 @@ export function Calm() {
   useEffect(() =>{
     if(currentSession.mindlogs.length !== 0){
       
-      const tableData = [];
+      const tabledata = [];
+      const graphxaxis = [];
+
+      const CP3values = [];
+      const C3values = [];
+      const F5values = [];
+      const PO3values = [];
+      const PO4values = [];
+      const F6values = [];
+      const C4values = [];
+      const CP4values = [];
+
       currentSession.mindlogs.map((item, i) => {
         for(var x=0; x < 16; x++){
-          tableData.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]])
+          tabledata.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]]);
+          CP3values.push(item.brainWaves.data[0][x]);
+          C3values.push(item.brainWaves.data[1][x]);
+          F5values.push(item.brainWaves.data[2][x]);
+          PO3values.push(item.brainWaves.data[3][x]);
+          PO4values.push(item.brainWaves.data[4][x]);
+          F6values.push(item.brainWaves.data[5][x]);
+          C4values.push(item.brainWaves.data[6][x]);
+          CP4values.push(item.brainWaves.data[7][x]);
         }
+        graphxaxis.push("","","","","","","","","","","","","","","","",);
       })
 
-     
-      setTableData(tableData);
+      setTableData(tabledata);
       setSessionTable(currentSession);
+
+      setGraphXAxis(graphxaxis);
+      setCP3(CP3values);
+      setC3(C3values);
+      setF5(F5values);
+      setPO3(PO3values);
+      setPO4(PO4values);
+      setF6(F6values);
+      setC4(C4values);
+      setCP4(CP4values);
 
       const csvData = [...tableData];
       csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
@@ -346,7 +389,7 @@ export function Calm() {
         const focusScore = Math.trunc(focus.probability * 100);
         setFocus(focusScore);
       })
-  
+
       return () => {
         brainSub.unsubscribe();
         calmSub.unsubscribe();
@@ -419,8 +462,10 @@ export function Calm() {
             <>&nbsp;{focus}%</> <div className="calm-word">focus</div>
           </div>
         </div>
+        
+        {/* <Charts graphXAxis={graphXAxis} CP3={CP3} C3={C3} F5={F5} PO3={PO3} PO4={PO4} F6={F6} C4={C4} CP4={CP4}/> */}
 
-        <div className="table-container">
+        {/* <div className="table-container">
           <table className="table table-striped">
             <thead>
               <tr className="table-head">
@@ -459,7 +504,7 @@ export function Calm() {
               })}
             </tbody>
           </table>
-        </div>
+        </div> */}
       </section>
 
     </main>
