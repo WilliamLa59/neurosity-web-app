@@ -11,6 +11,11 @@ import { Line } from "react-chartjs-2";
 import { Charts } from "../components/Charts";
 
 
+import { useRef } from "react/cjs/react.development";
+
+//2:52pm 8mins before crash
+//3:05pm 7mins before crash 2531 entries
+//3:16pm 23
 export function Calm() {
 
   const data = {
@@ -133,6 +138,7 @@ export function Calm() {
   
   //main state object
   const [currentSession, setCurrentSession] = useState({"date": now, "firstName":"", "lastName":"", "mindlogs": []});
+  // const [currentSession, setCurrentSession] = useState(testData);
   console.log(currentSession);
 
   //copy of main state object for table data
@@ -140,15 +146,16 @@ export function Calm() {
   const [tableData, setTableData] = useState([]);
   const [csvData, setCsvData] = useState([]);
 
-  const [graphXAxis, setGraphXAxis]=useState([]);
-  const [CP3, setCP3]=useState([]);
-  const [C3, setC3]=useState([]);
-  const [F5, setF5]=useState([]);
-  const [PO3, setPO3]=useState([]);
-  const [PO4, setPO4]=useState([]);
-  const [F6, setF6]=useState([]);
-  const [C4, setC4]=useState([]);
-  const [CP4, setCP4]=useState([]);
+  // const [graphXAxis, setGraphXAxis]=useState([]);
+  // const [CP3, setCP3]=useState([]);
+  // const [C3, setC3]=useState([]);
+  // const [F5, setF5]=useState([]);
+  // const [PO3, setPO3]=useState([]);
+  // const [PO4, setPO4]=useState([]);
+  // const [F6, setF6]=useState([]);
+
+  // const [C4, setC4]=useState([]);
+  // const [CP4, setCP4]=useState([]);
 
 
 
@@ -157,6 +164,40 @@ export function Calm() {
     newcalm: "",
     newfocus: "",
   });
+
+  const [testState, setTestState] = useState(false);
+
+  const testStateHandleChange = () => {
+    if (testState === false){
+      setFirstName("");
+      setLastName("")
+      setCsvData([]);
+      setTestState(true);
+      console.log("TEST: " + testState);
+    }else{
+      setTestState(false);
+      console.log("TEST: " + testState);
+    }
+  }
+
+  useEffect(() => {
+    if(testState === true){
+      const interval = setInterval(
+        // set number every 1s
+        () => {
+          setCalm(Math.floor(Math.random() * (100 - 1)+1)); 
+          setFocus(Math.floor(Math.random() * (100 - 1)+1));
+          
+        },
+        1000
+      );
+      return () => {
+        clearInterval(interval);
+      };
+
+    }
+  }, [testState]);
+
 
   //name input state object
   const [nameinputs, setNameInputs] = useState({
@@ -170,6 +211,12 @@ export function Calm() {
   const statusHandleChange = () => {
     if(status === false){
       setStatusText("Stop Reading");
+
+      //resets nessesarry states back to empty
+      setFirstName("");
+      setLastName("")
+      setCsvData([]);
+
       setStatus(true);
       console.log("Status: " + status);
     }else{
@@ -178,6 +225,8 @@ export function Calm() {
       console.log("Status: " + status);
     }
   }
+
+ 
 
   //function that takes the inputed calm and focus levels and 
   //builds them in a state object.
@@ -238,29 +287,38 @@ export function Calm() {
   //sends it to a API endpoint that saves it to a database
   const handleLog = () => {
     if(currentSession.mindlogs.length !== 0){
+      
       const payload = currentSession; 
+      // axios({
+      //   url:'http://localhost:8080/save',
+      //   method: 'POST',
+      //   data: payload
+      // })
+      // .then(() => {
+      //   console.log("Data has been sent to the server");
+      // })
+      // .catch(() => {
+      //   console.log("Internal server error");
+      // });;
       
-      console.log("payload"+JSON.stringify(payload));
+      const csvData = [];
+      currentSession.mindlogs.map((item, i) => {
+        for(var x=0; x < 16; x++){
+          csvData.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]]);
+        }  
+      });
+      csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
+      setCsvData(csvData);
 
-      axios({
-        url:'http://localhost:8080/save',
-        method: 'POST',
-        data: payload
-      })
-      .then(() => {
-        console.log("Data has been sent to the server");
-      })
-      .catch(() => {
-        console.log("Internal server error");
-      });;
-      
-      // // window.location.reload();
+
       setCurrentSession({"date": now, "firstName":"", "lastName":"", "mindlogs": []});
     }else{
       alert("Cannot Log a Session With 0 Entries");
     }
     setCounter(0);
   };
+
+ 
 
   //if there is no user relocate back to login screen
   useEffect(() => {
@@ -289,76 +347,76 @@ export function Calm() {
     }
   },[currentSession.firstName, currentSession.lastName]);
 
-
   //detects a change in value for calm and focus levels and adds a mindlog entry using the new values
   useEffect(() => {
-    if (focus !== 0){
-
+    if (calm!==0 && focus !== 0){
+      
       var current = new Date();
       const currentTime = current.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit', });
       current = currentTime;
 
       setCurrentSession((prevState) => ({
         ...prevState,
-        "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
+      "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
       }));
       setCounter(counter + 1);
     }
     
-  },[calm, focus, brainwaves]);
+  },[calm]);
 
+  
 
   //updates the table
   //on log it keeps the last session's data until a new session begins 
-  useEffect(() =>{
-    if(currentSession.mindlogs.length !== 0){
+  // useEffect(() =>{
+  //   if(currentSession.mindlogs.length !== 0){
       
-      const tabledata = [];
-      const graphxaxis = [];
+  //     const tabledata = [];
+  //     const graphxaxis = [];
 
-      const CP3values = [];
-      const C3values = [];
-      const F5values = [];
-      const PO3values = [];
-      const PO4values = [];
-      const F6values = [];
-      const C4values = [];
-      const CP4values = [];
+  //     // const CP3values = [];
+  //     // const C3values = [];
+  //     // const F5values = [];
+  //     // const PO3values = [];
+  //     // const PO4values = [];
+  //     // const F6values = [];
+  //     // const C4values = [];
+  //     // const CP4values = [];
 
-      currentSession.mindlogs.map((item, i) => {
-        for(var x=0; x < 16; x++){
-          tabledata.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]]);
-          CP3values.push(item.brainWaves.data[0][x]);
-          C3values.push(item.brainWaves.data[1][x]);
-          F5values.push(item.brainWaves.data[2][x]);
-          PO3values.push(item.brainWaves.data[3][x]);
-          PO4values.push(item.brainWaves.data[4][x]);
-          F6values.push(item.brainWaves.data[5][x]);
-          C4values.push(item.brainWaves.data[6][x]);
-          CP4values.push(item.brainWaves.data[7][x]);
-        }
-        graphxaxis.push("","","","","","","","","","","","","","","","",);
-      })
+  //     currentSession.mindlogs.map((item, i) => {
+  //       for(var x=0; x < 16; x++){
+  //         tabledata.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]]);
+  //     //     CP3values.push(item.brainWaves.data[0][x]);
+  //     //     C3values.push(item.brainWaves.data[1][x]);
+  //     //     F5values.push(item.brainWaves.data[2][x]);
+  //     //     PO3values.push(item.brainWaves.data[3][x]);
+  //     //     PO4values.push(item.brainWaves.data[4][x]);
+  //     //     F6values.push(item.brainWaves.data[5][x]);
+  //     //     C4values.push(item.brainWaves.data[6][x]);
+  //     //     CP4values.push(item.brainWaves.data[7][x]);
+  //       }
+  //     //   graphxaxis.push("","","","","","","","","","","","","","","","",);
+  //     })
 
-      setTableData(tabledata);
-      setSessionTable(currentSession);
+  //     setTableData(tabledata);
+  //     setSessionTable(currentSession);
 
-      setGraphXAxis(graphxaxis);
-      setCP3(CP3values);
-      setC3(C3values);
-      setF5(F5values);
-      setPO3(PO3values);
-      setPO4(PO4values);
-      setF6(F6values);
-      setC4(C4values);
-      setCP4(CP4values);
+  //     // setGraphXAxis(graphxaxis);
+  //     // setCP3(CP3values);
+  //     // setC3(C3values);
+  //     // setF5(F5values);
+  //     // setPO3(PO3values);
+  //     // setPO4(PO4values);
+  //     // setF6(F6values);
+  //     // setC4(C4values);
+  //     // setCP4(CP4values);
 
-      const csvData = [...tableData];
-      csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
-      setCsvData(csvData);
+  //     const csvData = [...tableData];
+  //     csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
+  //     setCsvData(csvData);
       
-    }
-  },[currentSession]);
+  //   }
+  // },[currentSession]);
 
 
   //For Device Reading
@@ -377,6 +435,7 @@ export function Calm() {
       console.log("is reading");
 
       const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
+        const brainwavedata = Math.trunc(brainwaves.data);
         setBrainWaves((brainwaves));  
       });
   
@@ -397,7 +456,7 @@ export function Calm() {
       };
     }
     
-  }, [user, brainwaves, calm, focus, status]);
+  }, [user, status]);
 
   return (
     <main className="main-container">
@@ -416,7 +475,8 @@ export function Calm() {
 
           {/*For Database testing */}
           <section style={{display: "block"}}>
-            <form onSubmit={testHandleSubmit}>
+            <button className="input-btn simulate-btn" onClick={testStateHandleChange}>Simulate Values</button>
+            {/* <form onSubmit={testHandleSubmit}>
               <div className="form-input" >
                 <input type='Text' name="newcalm" value={inputs.newcalm || ""} onChange={testHandleChange} placeholder="Set Calm"/>
               </div>
@@ -426,7 +486,7 @@ export function Calm() {
               
               <button className="input-btn simulate-btn">Simulate New Values</button>
             
-            </form>
+            </form> */}
           </section>
           {/*For Database testing */}
 
@@ -447,7 +507,7 @@ export function Calm() {
           </section>
           
 
-          <CSVLink className="btn btn-primary" style={sessionTable.firstName !== "" && sessionTable.lastName !== "" ? {pointerEvents: "auto" } : {pointerEvents: "none", background: "rgb(229, 229, 229)"}} data={csvData} filename={sessionTable.firstName+" "+sessionTable.lastName+" Brainwaves.csv"}>Download</CSVLink>
+          <CSVLink className="btn btn-primary" style={csvData.length !== 0 ? {pointerEvents: "auto" } : {pointerEvents: "none", background: "rgb(229, 229, 229)"}} data={csvData} filename={firstName+"_"+lastName+" Brainwaves.csv"}>Download</CSVLink>
         </div>
       </section>
 
