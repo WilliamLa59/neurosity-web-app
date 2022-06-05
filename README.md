@@ -24,10 +24,6 @@ Copy the following line and replace "CONNECTION STRING HERE" with your actual co
 
 2) In another terminal, cd into the client folder and run the react app using "npm start"
 
-### Test to see if your database is connected properly ( needs to be updated )
-If the connection string is correct you should be able to see "MongoDB connected successfully..." within the server side terminal when the server is started. If not you may have to go back and double check your .env file and connection string.
-
-
 ## ToDo List (in no particular order)
 - add timestamps for session end
 - explain functionality and processes in documentation 
