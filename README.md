@@ -7,6 +7,9 @@ Logs brainwaves, calm, and focus values to a MongoDB Atlas database
 Built off of the following **[Starter Code](https://github.com/neurosity/notion-react-starter)**.  
 
 ## Getting Started
+#### [Setup Instructions(For beginners)](https://docs.google.com/document/d/1gbDbX2cOK-kb6So1c6QXg4xP2p8YOMj1PqDFcEyIzyg/edit?usp=sharing)
+
+
 ### Before you start   
 This project assumes the MongoDB connection string is stored within a .env file under the variable name "CONNECTION_STRING".  
 You must create a new file called ".env" within the root directory  
