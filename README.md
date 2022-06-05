@@ -54,7 +54,6 @@ nuerosity-web-app/client/src/pages/Calm.js
 - search feature for table to display previous sessions
 - graph brainwaves (maybe calm and focus levels too?)
 - add styling
-- have "csvData" be created only when the "Download" button is pressed
 - ~~categorize database into "sessions" being a collection of entry logs~~
 - ~~add timestamps for each entries~~ 
 - ~~add naming functionality for each session~~
@@ -65,6 +64,7 @@ nuerosity-web-app/client/src/pages/Calm.js
 - ~~streamline data logging procedure~~
 - ~~start and stop button for reading from the crown~~
 - ~~transfer JSON data into excel/csv format and allow for download~~
+- ~~have "csvData" be created only when the "Download" button is pressed~~
 
 ## Bug List
 - ~~entryid doesn't increment when used with the device.~~
@@ -91,3 +91,12 @@ nuerosity-web-app/client/src/pages/Calm.js
 - added a download function for the table to download to CSV format
 ### 05/23/22
 - added some styling for main dashboard(still WIP)
+### 05/25/22
+- changed test method to automatically randomize calm and focus values every 1 second instead of manually inputting them
+- fixed issue with logging useEffect dependency array, logs 1 entry every time the calm value changes which is every 1 second
+### 05/30/22
+-fixed entryId not being saved in data base
+### 06/01/22
+- altered simulated test method to randomize calm and focus values every 62.5 ms to simulate grabbing every brainwave reading from the crown.
+### -6/05/22
+- altered logging timing to match simulated test method
