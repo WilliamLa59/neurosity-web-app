@@ -27,26 +27,6 @@ Copy the following line and replace "CONNECTION STRING HERE" with your actual co
 ### Test to see if your database is connected properly ( needs to be updated )
 If the connection string is correct you should be able to see "MongoDB connected successfully..." within the server side terminal when the server is started. If not you may have to go back and double check your .env file and connection string.
 
-Use the input fields to simulate a change in the calm and focus levels. This should trigger the web app to send over the new values to the database. You'll be able to see this within the server side terminal as well as on MongoDB, this is also a good time to see if its writing to the correct database.
-
-If everything is working then you can go ahead and comment out the input fields within the the Calm page, and test with an actual device.
-
-The specific code block is at the very bottom and will look like this. It can be found at:  
-nuerosity-web-app/client/src/pages/Calm.js
-        
-        {/*For Database testing */}
-        <div>
-        <form onSubmit={handleSubmit}>
-          <div className="form-input" >
-            <input type='Text' name="newcalm" value={inputs.newcalm || ""} onChange={handleChange}/>
-          </div>
-          <div className="form-input">
-            <input type='Text' name="newfocus" value={inputs.newfocus || ""} onChange={handleChange}/>
-          </div>
-          <button>submit</button>
-        </form>
-        </div> 
-        {/*For Database testing */}
 
 ## ToDo List (in no particular order)
 - add timestamps for session end
@@ -98,5 +78,8 @@ nuerosity-web-app/client/src/pages/Calm.js
 -fixed entryId not being saved in data base
 ### 06/01/22
 - altered simulated test method to randomize calm and focus values every 62.5 ms to simulate grabbing every brainwave reading from the crown.
-### -6/05/22
+### 06/03/22
 - altered logging timing to match simulated test method
+### -6/05/22
+- created Setup Instruction Document
+- revised main Readme.md
