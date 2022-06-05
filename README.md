@@ -44,6 +44,7 @@ Copy the following line and replace "CONNECTION STRING HERE" with your actual co
 
 ## Bug List
 - ~~entryid doesn't increment when used with the device.~~
+- ~~entryid has gaps in incrementation when used with the device.~~
 
 ## Changelog (mm/dd/yy)
 ### 05/09/22
