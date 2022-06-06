@@ -10,7 +10,6 @@ import axios from 'axios';
 import { Line } from "react-chartjs-2";
 import { Charts } from "../components/Charts";
 
-
 import { useRef } from "react/cjs/react.development";
 
 //2:52pm 8mins before crash
@@ -127,6 +126,7 @@ export function Calm() {
   const [status, setStatus] = useState(false);
   const [statusText, setStatusText] = useState("Start Reading");
 
+  const [signalQuality, setSignalQuality] = useState({});
 
   //creates session start date and time 
   var now = new Date();
@@ -187,9 +187,9 @@ export function Calm() {
         () => {
           setCalm(Math.floor(Math.random() * (100 - 1)+1)); 
           setFocus(Math.floor(Math.random() * (100 - 1)+1));
-          
+          setBrainWaves(data);
         },
-        1000
+        62.5
       );
       return () => {
         clearInterval(interval);
@@ -245,7 +245,6 @@ export function Calm() {
     
     setCalm(inputs.newcalm);
     setFocus(inputs.newfocus);
-  
     setBrainWaves(data);
     
   
@@ -289,21 +288,29 @@ export function Calm() {
     if(currentSession.mindlogs.length !== 0){
       
       const payload = currentSession; 
-      // axios({
-      //   url:'http://localhost:8080/save',
-      //   method: 'POST',
-      //   data: payload
-      // })
-      // .then(() => {
-      //   console.log("Data has been sent to the server");
-      // })
-      // .catch(() => {
-      //   console.log("Internal server error");
-      // });;
+      axios({
+        url:'http://localhost:8080/save',
+        method: 'POST',
+        data: payload
+      })
+      .then(() => {
+        console.log("Data has been sent to the server");
+      })
+      .catch(() => {
+        console.log("Internal server error");
+      });;
       
       const csvData = [];
       currentSession.mindlogs.map((item, i) => {
         for(var x=0; x < 16; x++){
+          // for(var y =0; y<8; y++){                     filters out values that are too high or too low
+          //   if (item.brainWaves.data[y][x] > 150){
+          //     item.brainWaves.data[y][x] = 150
+          //   }
+          //   if(item.brainWaves.data[y][x] < -150){
+          //     item.brainWaves.data[y][x] = -150
+          //   } 
+          // }
           csvData.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]]);
         }  
       });
@@ -336,21 +343,24 @@ export function Calm() {
       "firstName": firstName,
       "lastName": lastName
     }));
-    
+
   },[firstName, lastName]);
 
 
   //detects when first and last names are assigned to the main state object and calls the handleLog function
   useEffect(()=>{
+
     if (currentSession.firstName !== "" && currentSession.lastName !== ""){
       handleLog();
     }
+
   },[currentSession.firstName, currentSession.lastName]);
+
 
   //detects a change in value for calm and focus levels and adds a mindlog entry using the new values
   useEffect(() => {
     if (calm!==0 && focus !== 0){
-      
+
       var current = new Date();
       const currentTime = current.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit', });
       current = currentTime;
@@ -360,9 +370,9 @@ export function Calm() {
       "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
       }));
       setCounter(counter + 1);
+
     }
-    
-  },[calm]);
+  },[brainwaves]);
 
   
 
@@ -436,7 +446,12 @@ export function Calm() {
 
       const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
         const brainwavedata = Math.trunc(brainwaves.data);
-        setBrainWaves((brainwaves));  
+        setBrainWaves(brainwaves);  
+      });
+
+      const signalSub = notion.signalQuality().subscribe((signalQuality) => {
+        setSignalQuality(signalQuality);
+        console.log(signalQuality);
       });
   
       const calmSub = notion.calm().subscribe((calm) => {
@@ -451,12 +466,14 @@ export function Calm() {
 
       return () => {
         brainSub.unsubscribe();
+        signalSub.unsubscribe();
         calmSub.unsubscribe();
         focusSub.unsubscribe();
       };
     }
     
-  }, [user, status]);
+  }, [status]);
+
 
   return (
     <main className="main-container">
@@ -514,6 +531,19 @@ export function Calm() {
 
       <section className="display-dashboard">
         
+          <div>
+            <table>
+              {/* {signalQuality.map((signal, x) =>{
+                return(
+                  
+                  <p>Cp3: {signal[1]}</p>
+                );
+              })}
+             */}
+                  
+            </table>
+          </div>
+
         <div className="gauge-container">
           <div className="calm-score">
             <>&nbsp;{calm}%</> <div className="calm-word">Calm</div>
