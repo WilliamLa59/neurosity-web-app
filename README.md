@@ -72,11 +72,11 @@ Copy the following line and replace "CONNECTION STRING HERE" with your actual co
 - changed test method to automatically randomize calm and focus values every 1 second instead of manually inputting them
 - fixed issue with logging useEffect dependency array, logs 1 entry every time the calm value changes which is every 1 second
 ### 05/30/22
--fixed entryId not being saved in data base
+- fixed entryId not being saved in data base
 ### 06/01/22
 - altered simulated test method to randomize calm and focus values every 62.5 ms to simulate grabbing every brainwave reading from the crown.
 ### 06/03/22
 - altered logging timing to match simulated test method
-### -6/05/22
+### 6/05/22
 - created Setup Instruction Document
 - revised main Readme.md
