@@ -7,10 +7,6 @@ import { Nav } from "../components/Nav";
 import { CSVLink } from "react-csv";
 
 import axios from 'axios';
-import { Line } from "react-chartjs-2";
-import { Charts } from "../components/Charts";
-
-import { useRef } from "react/cjs/react.development";
 
 //2:52pm 8mins before crash
 //3:05pm 7mins before crash 2531 entries
