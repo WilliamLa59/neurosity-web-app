@@ -1,6 +1,6 @@
 # neurosity-web-app
 
-Web app that connects to a Neurosity Crown device to display the workers's calm and focus readings based on their brainwaves to determine their level of drowsiness as a result of narcotis.
+Web app that connects to a Neurosity Crown device to display the workers's calm and focus readings based on their brainwaves to determine their level of drowsiness as a result of narcotis. It also logs and translates the worker's brainwaves into a downloadable csv file. 
 
 Logs brainwaves, calm, and focus values to a MongoDB Atlas database
 
