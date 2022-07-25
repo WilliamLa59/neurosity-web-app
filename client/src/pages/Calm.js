@@ -13,6 +13,62 @@ import axios from 'axios';
 //3:16pm 23
 export function Calm() {
 
+  const data2 = {
+    label: 'powerByBand',
+    data: {
+      alpha: [
+        0.4326838933650053,
+        0.7011913998347046,
+        1.3717684682104212,
+        0.4043711439234614,
+        0.4276277910286375,
+        0.7343967679911133,
+        0.4643529443786634,
+        0.5012185195340365
+      ],
+      beta: [
+        1.0473270376446968,
+        0.6565360935142369,
+        0.9905849734272257,
+        0.4167252084581245,
+        0.5812834985846604,
+        0.9092642713573444,
+        0.9963075404421067,
+        1.0495665446734443
+      ],
+      delta: [
+        0.46131690566460004,
+        1.0030278320362798,
+        0.8563781797682917,
+        0.2911634678359473,
+        0.5829804845703581,
+        0.6714666592936025,
+        0.37730719195446316,
+        1.0851178080710937
+      ],
+      gamma: [
+        0.22648773160183822,
+        0.2171827127990081,
+        0.2626969784220435,
+        0.16349594919353772,
+        0.17327387900192714,
+        0.18990085940799623,
+        0.22908540295491436,
+        0.2537584109981627
+      ],
+      theta: [
+        0.6434504807739541,
+        0.936240328507981,
+        0.8679595766147628,
+        0.23662065697316603,
+        0.6048174207817718,
+        0.816112075629094,
+        0.3367745804938397,
+        1.1043745310136739
+      ]
+    }
+  }
+
   const data = {
     label: 'raw',
     data: [
@@ -115,6 +171,9 @@ export function Calm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [brainwaves, setBrainWaves] = useState({});
+
+  const [brainwaves2, setBrainWaves2] = useState({});
+
   const [calm, setCalm] = useState(0);
   const [focus, setFocus] = useState(0);
   const [counter, setCounter] = useState(1);
@@ -141,6 +200,7 @@ export function Calm() {
   const [sessionTable, setSessionTable] = useState(currentSession);
   const [tableData, setTableData] = useState([]);
   const [csvData, setCsvData] = useState([]);
+  const [csvData2, setCsvData2] = useState([]);
 
   // const [graphXAxis, setGraphXAxis]=useState([]);
   // const [CP3, setCP3]=useState([]);
@@ -184,6 +244,7 @@ export function Calm() {
           setCalm(Math.floor(Math.random() * (100 - 1)+1)); 
           setFocus(Math.floor(Math.random() * (100 - 1)+1));
           setBrainWaves(data);
+          setBrainWaves2(data2);
         },
         62.5
       );
@@ -242,7 +303,7 @@ export function Calm() {
     setCalm(inputs.newcalm);
     setFocus(inputs.newfocus);
     setBrainWaves(data);
-    
+    setBrainWaves2(data2);
   
 
     setCounter(counter + 1);
@@ -283,20 +344,21 @@ export function Calm() {
   const handleLog = () => {
     if(currentSession.mindlogs.length !== 0){
       
-      const payload = currentSession; 
-      axios({
-        url:'http://localhost:8080/save',
-        method: 'POST',
-        data: payload
-      })
-      .then(() => {
-        console.log("Data has been sent to the server");
-      })
-      .catch(() => {
-        console.log("Internal server error");
-      });;
+      // const payload = currentSession; 
+      // axios({
+      //   url:'http://localhost:8080/save',
+      //   method: 'POST',
+      //   data: payload
+      // })
+      // .then(() => {
+      //   console.log("Data has been sent to the server");
+      // })
+      // .catch(() => {
+      //   console.log("Internal server error");
+      // });;
       
       const csvData = [];
+      const csvData2 = [];
       currentSession.mindlogs.map((item, i) => {
         for(var x=0; x < 16; x++){
           // for(var y =0; y<8; y++){                     filters out values that are too high or too low
@@ -307,12 +369,24 @@ export function Calm() {
           //     item.brainWaves.data[y][x] = -150
           //   } 
           // }
-          csvData.push([item.time,item.entryId,item.calm, item.focus, item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x]]);
-        }  
-      });
-      csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
-      setCsvData(csvData);
+          csvData.push([item.time,item.entryId,item.calm, item.focus, 
+            item.brainWaves.data[0][x],item.brainWaves.data[1][x],item.brainWaves.data[2][x],item.brainWaves.data[3][x],
+            item.brainWaves.data[4][x],item.brainWaves.data[5][x],item.brainWaves.data[6][x],item.brainWaves.data[7][x],
+            ]);
+        } 
 
+        for(var y=0; y < 8; y++){
+          csvData2.push([item.time,item.entryId,item.calm, item.focus,
+            item.brainWaves2.data["alpha"][y],item.brainWaves2.data["beta"][y],item.brainWaves2.data["delta"][y],item.brainWaves2.data["gamma"][y],item.brainWaves2.data["theta"][y]
+          ]);
+        }
+
+      });
+
+      csvData.unshift(["timestamp", "entryId", "calm", "focus", "CP3", "C3", "F5", "PO3", "PO4", "F6", "C4", "CP4"])
+      csvData2.unshift(["timestamp", "entryId", "calm", "focus","alpha", "beta", "delta", "gamma", "theta"])
+      setCsvData(csvData);
+      setCsvData2(csvData2);
 
       setCurrentSession({"date": now, "firstName":"", "lastName":"", "mindlogs": []});
     }else{
@@ -363,12 +437,13 @@ export function Calm() {
 
       setCurrentSession((prevState) => ({
         ...prevState,
-      "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves}]
+      "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":brainwaves, "brainWaves2": brainwaves2}]
+      // "mindlogs": [...prevState.mindlogs, {"time":current ,"entryId": counter, "calm":calm/100, "focus":focus/100, "brainWaves":data, "brainWaves2": data2}]
       }));
       setCounter(counter + 1);
 
     }
-  },[brainwaves]);
+  },[calm]);
 
   
 
@@ -443,6 +518,13 @@ export function Calm() {
       const brainSub = notion.brainwaves("raw").subscribe((brainwaves) => {
         const brainwavedata = Math.trunc(brainwaves.data);
         setBrainWaves(brainwaves);  
+        // setBrainWaves(data);  
+      });
+
+      const brainSub2 = notion.brainwaves("powerByBand").subscribe((brainwaves) => {
+        const brainwavedata2 = Math.trunc(brainwaves.data);
+        setBrainWaves2(brainwaves);  
+        // setBrainWaves2(data2); 
       });
 
       const signalSub = notion.signalQuality().subscribe((signalQuality) => {
@@ -520,7 +602,8 @@ export function Calm() {
           </section>
           
 
-          <CSVLink className="btn btn-primary" style={csvData.length !== 0 ? {pointerEvents: "auto" } : {pointerEvents: "none", background: "rgb(229, 229, 229)"}} data={csvData} filename={firstName+"_"+lastName+" Brainwaves.csv"}>Download</CSVLink>
+          <CSVLink className="btn btn-primary" style={csvData.length !== 0 ? {pointerEvents: "auto" } : {pointerEvents: "none", background: "rgb(229, 229, 229)"}} data={csvData} filename={firstName+"_"+lastName+" Brainwaves.csv"}>Download Raw</CSVLink>
+          <CSVLink className="btn btn-primary" style={csvData2.length !== 0 ? {pointerEvents: "auto" } : {pointerEvents: "none", background: "rgb(229, 229, 229)"}} data={csvData2} filename={firstName+"_"+lastName+" Brainwaves2.csv"}>Download PowerByBand</CSVLink>
         </div>
       </section>
 
