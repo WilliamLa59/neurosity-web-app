@@ -80,3 +80,5 @@ Copy the following line and replace "CONNECTION STRING HERE" with your actual co
 ### 6/05/22
 - created Setup Instruction Document
 - revised main Readme.md
+### 07/25/22
+-  added feature to download and view both Raw and Power By Band brainwave data
