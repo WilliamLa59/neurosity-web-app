@@ -1,10 +1,13 @@
 # neurosity-web-app
 
-Web app that connects to a Neurosity Crown device to display the workers's calm and focus readings based on their brainwaves to determine their level of drowsiness as a result of narcotis. It also logs and translates the worker's brainwaves into a downloadable csv file. 
+Web application that connects to a Neurosity Crown device to display a workers's calm and focus readings based on their brainwaves to determine their level of drowsiness as a result of narcotis. It also logs and translates the worker's brainwaves into a downloadable csv file. 
 
 Logs brainwaves, calm, and focus values to a MongoDB Atlas database
 
 Built off of the following **[Starter Code](https://github.com/neurosity/notion-react-starter)**.  
+
+# Demo
+A demo version can be found [Here](https://github.com/WilliamLa59/neurosity-web-app-demo). This demostrates the app's base functionality without the need of the Crown.
 
 ## Getting Started
 #### [Setup Instructions(For beginners)](https://docs.google.com/document/d/1gbDbX2cOK-kb6So1c6QXg4xP2p8YOMj1PqDFcEyIzyg/edit?usp=sharing)
